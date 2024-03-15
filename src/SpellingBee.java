@@ -47,14 +47,62 @@ public class SpellingBee {
     //  that will find the substrings recursively.
     public void generate() {
         // YOUR CODE HERE — Call your recursive method!
+        makeWords("", letters);
+
     }
+    public void makeWords(String word, String letters){
+        if(!word.isEmpty()){
+            words.add(word);
+        }
+        if(letters.isEmpty()){
+            return;
+        }
+        for(int i = 0; i < letters.length(); i++){
+            makeWords(word + letters.charAt(i), letters.substring(0, i) + letters.substring(i+1));
+        }
+    }
+
 
     // TODO: Apply mergesort to sort all words. Do this by calling ANOTHER method
     //  that will find the substrings recursively.
     public void sort() {
         // YOUR CODE HERE
-    }
+        mergeSplit(words, 0, words.size());
 
+    }
+    public void mergeSplit(ArrayList<String> words, int low, int high){
+        if(high - low <= 0){
+            //String[] newArr = {words.get(low)};
+            return;
+        }
+        int midpoint = (high + low) / 2;
+        mergeSplit(words, low, midpoint);
+        mergeSplit(words, midpoint + 1, high);
+        merge(low, midpoint, high);
+    }
+    public String[] merge(String[] arr1, String[] arr2){
+        String[] sorted = new String[arr1.length + arr2.length];
+        int i = 0, j = 0;
+        while(i < arr1.length && j < arr2.length) {
+            if (arr1[i].compareTo(arr2[j]) < 0) {
+                sorted[i + j] = arr1[i];
+                i++;
+            }
+            else{
+                sorted[i+j] = arr2[j];
+                j++;
+            }
+        }
+        while(j < arr2.length){
+            sorted[i+j] = arr2[j];
+            j++;
+        }
+        while(i < arr1.length){
+            sorted[i+j] = arr1[i];
+            i++;
+        }
+        return sorted;
+    }
     // Removes duplicates from the sorted list.
     public void removeDuplicates() {
         int i = 0;
